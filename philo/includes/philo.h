@@ -13,12 +13,15 @@
 #ifndef PHILO_H
 # define PHILO_H
 
+# include <stdbool.h>
 # include <string.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
 # include <pthread.h>
+
+# define INT_MAX 2147483647
 
 typedef struct s_args
 {
@@ -28,5 +31,8 @@ typedef struct s_args
 	int		time_sleep;
 	int		num_eat;
 }				t_args;
+
+long	ft_atoi_l(const char *str);
+int		ft_isdigit(int c);
 
 #endif
