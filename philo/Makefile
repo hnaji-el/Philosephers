@@ -6,14 +6,15 @@
 #    By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/16 10:01:14 by hnaji-el          #+#    #+#              #
-#    Updated: 2021/11/16 10:19:50 by hnaji-el         ###   ########.fr        #
+#    Updated: 2021/11/17 09:22:54 by hnaji-el         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo
 
 SRCS = ./srcs/main.c \
-		./srcs/philo_utils.c
+	   ./srcs/philo_utils.c \
+	   ./srcs/parsing.c
 
 INCLUDES = ./includes/philo.h
 
