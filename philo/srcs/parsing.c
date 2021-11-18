@@ -26,7 +26,7 @@ int	put_error(int errnum)
 void	initialize_args(t_args *args, int number, int argc)
 {
 	if (argc == 2)
-		args->num_philos = number;
+		args->nb_philos = number;
 	else if (argc == 3)
 		args->time_die = number;
 	else if (argc == 4)
@@ -34,7 +34,7 @@ void	initialize_args(t_args *args, int number, int argc)
 	else if (argc == 5)
 		args->time_sleep = number;
 	else
-		args->num_eat = number;
+		args->nb_eat = number;
 }
 
 bool	elements_isvalid(char *str, int *i)
@@ -81,7 +81,7 @@ int	parsing(t_args **args, int argc, char **argv)
 	*args = (t_args *)malloc(sizeof(t_args));
 	if (*args == NULL)
 		return (put_error(3));
-	(*args)->num_eat = -1;
+	(*args)->nb_eat = -1;
 	while (argc-- > 1)
 	{
 		if (!argument_isvalid(argv[argc], &number))

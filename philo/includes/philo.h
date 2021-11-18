@@ -23,13 +23,21 @@
 
 # define INT_MAX 2147483647
 
+typedef	struct s_node
+{
+	int				nb_philos;
+	int				philo_id;
+	pthread_mutex_t	mutex;
+	struct s_node	*next;
+}				t_node;
+
 typedef struct s_args
 {
-	int		num_philos;
+	int		nb_philos;
 	int		time_die;
 	int		time_eat;
 	int		time_sleep;
-	int		num_eat;
+	int		nb_eat;
 }				t_args;
 
 /*			parsing.c			*/
