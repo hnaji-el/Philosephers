@@ -14,18 +14,19 @@ NAME = philo
 
 SRCS = ./srcs/main.c \
 	   ./srcs/philo_utils.c \
-	   ./srcs/parsing.c
+	   ./srcs/parsing.c \
+	   ./srcs/circular_lst.c \
 
 INCLUDES = ./includes/philo.h
 
 COMPILER = cc
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 all: $(NAME)
 
 $(NAME): $(SRCS) $(INCLUDES)
-	@$(COMPILER) $(FLAGS) -g -fsanitize=address $(SRCS) -o $(NAME) 
+	@$(COMPILER) $(FLAGS) $(SRCS) -o $(NAME) 
 
 clean:
 	@rm -rf $(NAME)

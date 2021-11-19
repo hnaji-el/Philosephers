@@ -23,22 +23,22 @@
 
 # define INT_MAX 2147483647
 
-typedef	struct s_node
-{
-	int				nb_philos;
-	int				philo_id;
-	pthread_mutex_t	mutex;
-	struct s_node	*next;
-}				t_node;
-
 typedef struct s_args
 {
-	int		nb_philos;
+	int		nb_philo;
 	int		time_die;
 	int		time_eat;
 	int		time_sleep;
 	int		nb_eat;
 }				t_args;
+
+typedef	struct s_list
+{
+	int				philo_id;
+	pthread_mutex_t	mutex;
+	t_args			*args;
+	struct s_list	*next;
+}				t_list;
 
 /*			parsing.c			*/
 int		parsing(t_args **args, int argc, char **argv);
@@ -50,5 +50,11 @@ int		put_error(int errnum);
 /*			philo_utils.c		*/
 long	ft_atoi_l(const char *str);
 int		ft_isdigit(int c);
+
+/*			circular_lst.c		*/
+int		lstadd_front(t_list **lst, t_args *args, int ph_id, pthread_mutex_t mutex);
+int		lstadd_back(t_list **lst, t_args *args, int ph_id, pthread_mutex_t mutex);
+void	lstclear_front(t_list **lst);
+void	lstclear(t_list **lst);
 
 #endif

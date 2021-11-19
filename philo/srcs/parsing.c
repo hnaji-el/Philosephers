@@ -20,13 +20,17 @@ int	put_error(int errnum)
 		write(2, "Error\nInvalid argument\n", 23);
 	if (errnum == 3)
 		write(2, "Error\nCannot allocate memory\n", 29);
+	if (errnum == 4)
+		write(2, "Error\nThe pthread_join() function failed\n", 41);
+	if (errnum == 5)
+		write(2, "Error\nThe pthread_create() function failed\n", 43);
 	return (-1);
 }
 
 void	initialize_args(t_args *args, int number, int argc)
 {
 	if (argc == 2)
-		args->nb_philos = number;
+		args->nb_philo = number;
 	else if (argc == 3)
 		args->time_die = number;
 	else if (argc == 4)
