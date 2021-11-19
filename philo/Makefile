@@ -6,7 +6,7 @@
 #    By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/16 10:01:14 by hnaji-el          #+#    #+#              #
-#    Updated: 2021/11/17 09:22:54 by hnaji-el         ###   ########.fr        #
+#    Updated: 2021/11/19 01:23:50 by hnaji-el         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ FLAGS = -Wall -Wextra -Werror
 all: $(NAME)
 
 $(NAME): $(SRCS) $(INCLUDES)
-	@$(COMPILER) $(FLAGS) $(SRCS) -o $(NAME) 
+	@$(COMPILER) $(FLAGS) -g -fsanitize=address $(SRCS) -o $(NAME) 
 
 clean:
 	@rm -rf $(NAME)
