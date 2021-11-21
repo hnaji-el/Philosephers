@@ -6,7 +6,7 @@
 /*   By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 09:47:12 by hnaji-el          #+#    #+#             */
-/*   Updated: 2021/11/21 15:21:30 by hnaji-el         ###   ########.fr       */
+/*   Updated: 2021/11/21 19:14:05 by hnaji-el         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ long	ft_atoi_l(const char *str);
 int		ft_isdigit(int c);
 
 /*			circular_lst.c		*/
-int		lstadd_front(t_list **lst, t_args *args, int ph_id, pthread_mutex_t mutex);
-int		lstadd_back(t_list **lst, t_args *args, int ph_id, pthread_mutex_t mutex);
+int		lstadd_front(t_list **lst, t_args *args, int ph_id, mutex_t mutex);
+int		lstadd_back(t_list **lst, t_args *args, int ph_id, mutex_t mutex);
 void	lstclear_front(t_list **lst);
 
 /*		   create_lst.c	    	*/
