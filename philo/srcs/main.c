@@ -12,49 +12,45 @@
 
 #include "../includes/philo.h"
 
-int	join_threads(pthread_t *th, int nb)
+long	timer_us(void)
 {
-	int		i;
+	struct timeval	cur_time;
 
-	i = -1;
-	while (++i < nb)
+	gettimeofday(&cur_time, NULL);
+	return ((cur_time.tv_sec * 1000000) + cur_time.tv_usec);
+}
+
+int	usleep_(useconds_t usec)
+{
+	long	start_time;
+
+	start_time = timer_us();
+	usleep(usec - 10000);
+	while (1)
 	{
-		if (pthread_join(th[i], NULL) != 0)
-			return (-1);
+		if ((timer_us() - start_time) >= usec)
+			break ;
+		usleep(1000);
 	}
 	return (0);
 }
 
-int	create_mutexes(pthread_mutex_t	**mutex, int nb)
+void	usleep_(useconds_t usec)
 {
-	int		i;
+	struct timeval	start;
+	struct timeval	end;
+	long			us;
 
-	i = 0;
-	*mutex = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * nb);
-	if (*mutex == NULL)
-		return (-1);
-	while (i < nb)
+	gettimeofday(&start, NULL);
+	usleep(usec - 10000);
+	while (1)
 	{
-		if (pthread_mutex_init(*mutex + i, NULL) != 0)
-			return (-1);
-		i++;
+		gettimeofday(&end, NULL);
+		us = (end.tv_sec - start.tv_sec) * 1000000;
+		if ((us + end.tv_usec - start.tv_usec) >= usec)
+			break ; 
+		usleep(1000);
 	}
-	return (0);
-}
-
-int	create_lst(t_list **lst, t_args *args)
-{
-	pthread_mutex_t	*mutex;
-	int				i;
-	int				ret;
-
-	*lst = NULL;
-	i = args->nb_philo;
-	ret = create_mutexes(&mutex, args->nb_philo);
-	while (ret == 0 && --i >= 0)
-		ret = lstadd_front(lst, args, i + 1, mutex[i]);
-	free(mutex);
-	return (ret);
 }
 
 void	*start_routine(void *ptr)
@@ -69,54 +65,39 @@ void	*start_routine(void *ptr)
 		pthread_mutex_lock(&(lst->next->mutex));
 		printf("time %d has taken a fork\n", lst->philo_id);
 		printf("time %d is eating\n", lst->philo_id);
-		usleep(lst->args->time_eat * 1000);
+		ft_usleep(lst->args->time_eat * 1000);
 		pthread_mutex_unlock(&(lst->mutex));
 		pthread_mutex_unlock(&(lst->next->mutex));
 		printf("time %d is sleeping\n", lst->philo_id);
-		usleep(lst->args->time_sleep * 1000);
+		ft_usleep(lst->args->time_sleep * 1000);
 		printf("time %d is thinking\n", lst->philo_id);
 	}
 	return (ptr);
 }
 
-int	create_threads(t_args *args)
+int	free_memory(t_list *lst, t_args *args, int ret)
 {
-	pthread_t	*th;
-	t_list		*lst;
-	int			i;
-
-	i = 0;
-	if (create_lst(&lst, args) == -1)
-	{
-		lstclear(&lst);
-		return (put_error(3));
-	}
-	th = (pthread_t *)malloc(sizeof(pthread_t) * args->nb_philo);
-	if (th == NULL)
-	{
-		lstclear(&lst);
-		return (put_error(3));
-	}
-	while (i < args->nb_philo)
-	{
-		lst = lst->next;
-		pthread_create(&th[i], NULL, start_routine, lst);
-		usleep(50);
-		i++;
-	}
-	join_threads(th, args->nb_philo);
-	return (0);
+	if (args != NULL)
+		free(args);
+	while (lst != NULL)
+		lstclear_front(&lst);
+	if (ret == -1)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 int	main(int argc, char **argv)
 {
+	t_list		*lst;
 	t_args		*args;
 	int			ret;
+	int			exit_status;
 
-	ret = parsing(&args, argc, argv);
-	if (ret == 0)
-	{
-		ret = create_threads(args);
-	}
-	return (ret);
+	ret = -1;
+	lst = (void *)0;
+	args = (void *)0;
+	if (!parsing(&args, argc, argv) && !create_lst(&lst, args))
+		ret = create_threads(lst);
+	exit_status = free_memory(lst, args, ret);
+	return (exit_status);
 }

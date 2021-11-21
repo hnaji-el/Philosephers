@@ -13,9 +13,13 @@
 NAME = philo
 
 SRCS = ./srcs/main.c \
+	   ./srcs/create_threads.c \
+	   ./srcs/create_lst.c \
 	   ./srcs/philo_utils.c \
 	   ./srcs/parsing.c \
 	   ./srcs/circular_lst.c \
+	   ./srcs/start_routine.c \
+	   ./srcs/timer.c \
 
 INCLUDES = ./includes/philo.h
 

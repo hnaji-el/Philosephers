@@ -62,11 +62,6 @@ void	lstclear_front(t_list **lst)
 	(*lst)->next = temp->next;
 	if (temp == *lst)
 		*lst = NULL;
+	pthread_mutex_destroy(&temp->mutex);
 	free(temp);
-}
-
-void	lstclear(t_list **lst)
-{
-	while (*lst != NULL)
-		lstclear_front(lst);
 }

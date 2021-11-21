@@ -79,7 +79,6 @@ int	parsing(t_args **args, int argc, char **argv)
 {
 	int		number;
 	
-	*args = (void *)0;
 	if (argc > 6 || argc < 5)
 		return (put_error(1));
 	*args = (t_args *)malloc(sizeof(t_args));

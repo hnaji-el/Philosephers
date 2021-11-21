@@ -55,6 +55,15 @@ int		ft_isdigit(int c);
 int		lstadd_front(t_list **lst, t_args *args, int ph_id, pthread_mutex_t mutex);
 int		lstadd_back(t_list **lst, t_args *args, int ph_id, pthread_mutex_t mutex);
 void	lstclear_front(t_list **lst);
-void	lstclear(t_list **lst);
+
+/*		   create_lst.c	    	*/
+int		create_lst(t_list **lst, t_args *args);
+int		create_mutexes(pthread_mutex_t	**mutex, int nb);
+
+/*	     create_threads.c	  	*/
+int		create_threads(t_list *lst);
+int		join_threads(pthread_t *th, int nb);
+
+void	*start_routine(void *ptr);
 
 #endif
