@@ -1,7 +1,7 @@
 
 #include "../includes/philo.h"
 
-int	create_mutexes(pthread_mutex_t	**mutex, int nb)
+int	create_mutexs(pthread_mutex_t	**mutex, int nb)
 {
 	int		i;
 
@@ -25,7 +25,7 @@ int	create_lst(t_list **lst, t_args *args)
 	int				ret;
 
 	i = args->nb_philo;
-	ret = create_mutexes(&mutex, args->nb_philo);
+	ret = create_mutexs(&mutex, args->nb_philo);
 	while (ret == 0 && --i >= 0)
 		ret = lstadd_front(lst, args, i + 1, mutex[i]);
 	free(mutex);

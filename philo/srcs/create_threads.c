@@ -29,7 +29,7 @@ int	create_threads(t_list *lst)
 	{
 		lst = lst->next;
 		pthread_create(&th[i], NULL, start_routine, lst);
-		usleep(50);
+		usleep(100);
 		i++;
 	}
 	/*

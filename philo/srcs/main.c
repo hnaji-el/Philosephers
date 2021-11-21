@@ -6,7 +6,7 @@
 /*   By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 09:48:31 by hnaji-el          #+#    #+#             */
-/*   Updated: 2021/11/19 02:09:53 by hnaji-el         ###   ########.fr       */
+/*   Updated: 2021/11/21 15:23:01 by hnaji-el         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,59 +20,49 @@ long	timer_us(void)
 	return ((cur_time.tv_sec * 1000000) + cur_time.tv_usec);
 }
 
-int	usleep_(useconds_t usec)
+int	correct_usleep(useconds_t usec)
 {
 	long	start_time;
 
 	start_time = timer_us();
 	usleep(usec - 10000);
-	while (1)
-	{
-		if ((timer_us() - start_time) >= usec)
-			break ;
-		usleep(1000);
-	}
+	while (timer_us() - start_time < usec);
 	return (0);
 }
 
-void	usleep_(useconds_t usec)
+void	print_status(t_list *lst, char *str, long start_time)
 {
-	struct timeval	start;
-	struct timeval	end;
-	long			us;
-
-	gettimeofday(&start, NULL);
-	usleep(usec - 10000);
-	while (1)
-	{
-		gettimeofday(&end, NULL);
-		us = (end.tv_sec - start.tv_sec) * 1000000;
-		if ((us + end.tv_usec - start.tv_usec) >= usec)
-			break ; 
-		usleep(1000);
-	}
+	pthread_mutex_lock();
+	printf("%ld %d %s\n",
+			(timer_us() - start_time) / 1000,
+			lst->philo_id,
+			str
+			);
+	pthread_mutex_unlock();
 }
 
 void	*start_routine(void *ptr)
 {
+	long	start_time;
 	t_list	*lst;
 
+	start_time = timer_us();
 	lst = (t_list *)ptr;
 	while (1)
 	{
 		pthread_mutex_lock(&(lst->mutex));
-		printf("time %d has taken a fork\n", lst->philo_id);
+		print_status(lst, "has taken a fork", start_time);
 		pthread_mutex_lock(&(lst->next->mutex));
-		printf("time %d has taken a fork\n", lst->philo_id);
-		printf("time %d is eating\n", lst->philo_id);
-		ft_usleep(lst->args->time_eat * 1000);
+		print_status(lst, "has taken a fork", start_time);
+		print_status(lst, "is eating", start_time);
+		correct_usleep(lst->args->time_eat * 1000);
 		pthread_mutex_unlock(&(lst->mutex));
 		pthread_mutex_unlock(&(lst->next->mutex));
-		printf("time %d is sleeping\n", lst->philo_id);
-		ft_usleep(lst->args->time_sleep * 1000);
-		printf("time %d is thinking\n", lst->philo_id);
+		print_status(lst, "is sleeping", start_time);
+		correct_usleep(lst->args->time_sleep * 1000);
+		print_status(lst, "is thinking", start_time);
 	}
-	return (ptr);
+	return (NULL);
 }
 
 int	free_memory(t_list *lst, t_args *args, int ret)

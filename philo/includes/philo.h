@@ -6,7 +6,7 @@
 /*   By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 09:47:12 by hnaji-el          #+#    #+#             */
-/*   Updated: 2021/11/19 02:09:56 by hnaji-el         ###   ########.fr       */
+/*   Updated: 2021/11/21 15:21:30 by hnaji-el         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 
 # define INT_MAX 2147483647
 
+typedef pthread_mutex_t mutex_t
+
 typedef struct s_args
 {
 	int		nb_philo;
@@ -30,12 +32,13 @@ typedef struct s_args
 	int		time_eat;
 	int		time_sleep;
 	int		nb_eat;
+	mutex_t	mutex;
 }				t_args;
 
 typedef	struct s_list
 {
 	int				philo_id;
-	pthread_mutex_t	mutex;
+	mutex_t			mutex;
 	t_args			*args;
 	struct s_list	*next;
 }				t_list;
@@ -58,7 +61,7 @@ void	lstclear_front(t_list **lst);
 
 /*		   create_lst.c	    	*/
 int		create_lst(t_list **lst, t_args *args);
-int		create_mutexes(pthread_mutex_t	**mutex, int nb);
+int		create_mutexs(pthread_mutex_t	**mutex, int nb);
 
 /*	     create_threads.c	  	*/
 int		create_threads(t_list *lst);
