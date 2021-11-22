@@ -38,17 +38,17 @@ int	correct_usleep(useconds_t usec)
 	return (0);
 }
 
-void	print_status(t_list *lst, char *str, long start_time)
+void	print_status(t_list *lst, char *str)
 {
-	if (lst->args->die == 1)
+	if (!lst->args->die)
 	{
-		pthread_mutex_lock(&(lst->args->mutex));
+		pthread_mutex_lock(&(lst->args->display));
 		printf("%ld %d %s\n",
-			timer_ms() - start_time,
+			timer_ms() - lst->t_start_sim,
 			lst->philo_id,
 			str
 			);
-		pthread_mutex_unlock(&(lst->args->mutex));
+		pthread_mutex_unlock(&(lst->args->display));
 	}
 }
 
@@ -57,22 +57,22 @@ void	*start_routine(void *ptr)
 	t_list	*lst;
 
 	lst = (t_list *)ptr;
-	lst->start_time = timer_ms();
-	lst->t_last_meal = lst->start_time;
-	while (1)
+	if (lst->philo_id % 2 == 0)
+		usleep(100);
+	while (!lst->args->die)
 	{
-		pthread_mutex_lock(&(lst->mutex));
-		print_status(lst, "has taken a fork", lst->start_time);
-		pthread_mutex_lock(&(lst->next->mutex));
-		print_status(lst, "has taken a fork", lst->start_time);
+		pthread_mutex_lock(&(lst->fork));
+		print_status(lst, "has taken a fork");
+		pthread_mutex_lock(&(lst->next->fork));
+		print_status(lst, "has taken a fork");
 		lst->t_last_meal = timer_ms();
-		print_status(lst, "is eating", lst->start_time);
+		print_status(lst, "is eating");
 		correct_usleep(lst->args->time_eat * 1000);
-		pthread_mutex_unlock(&(lst->mutex));
-		pthread_mutex_unlock(&(lst->next->mutex));
-		print_status(lst, "is sleeping", lst->start_time);
+		pthread_mutex_unlock(&(lst->fork));
+		pthread_mutex_unlock(&(lst->next->fork));
+		print_status(lst, "is sleeping");
 		correct_usleep(lst->args->time_sleep * 1000);
-		print_status(lst, "is thinking", lst->start_time);
+		print_status(lst, "is thinking");
 	}
 	return (NULL);
 }

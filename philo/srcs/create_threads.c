@@ -14,37 +14,42 @@ int	join_threads(pthread_t *th, int nb)
 	return (0);
 }
 
+void	controller_of_threads(t_list *lst)
+{
+	while (1)
+	{
+		lst = lst->next;
+		if (timer_ms() - lst->t_last_meal >= lst->args->time_die)
+		{
+			print_status(lst, "died");
+			lst->args->die = 1;
+			break ;
+		}
+	}
+}
+
 int	create_threads(t_list *lst)
 {
 	pthread_t	*th;
 	int			nb;
 	int			i;
+	long		t_start_sim;
 
 	i = 0;
 	nb = lst->args->nb_philo;
 	th = (pthread_t *)malloc(sizeof(pthread_t) * nb);
 	if (th == NULL)
 		return (put_error(3));
+	t_start_sim = timer_ms();
 	while (i < nb)
 	{
 		lst = lst->next;
+		lst->t_start_sim = t_start_sim;
+		lst->t_last_meal = t_start_sim;
 		pthread_create(&th[i], NULL, start_routine, lst);
-		usleep(50);
 		i++;
 	}
-	/*
-	 * supervisor
-	 */
-	while (1)
-	{
-		lst = lst->next;
-		if (timer_ms() - lst->t_last_meal >= lst->args->time_die)
-		{
-			print_status(lst, "died", lst->start_time);
-			lst->args->die = 1;
-			break ;
-		}
-	}
+	controller_of_threads(lst);
 	join_threads(th, nb);
 	return (0);
 }

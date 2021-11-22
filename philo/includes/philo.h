@@ -23,25 +23,24 @@
 
 # define INT_MAX 2147483647
 
-typedef pthread_mutex_t mutex_t;
-
 typedef struct s_args
 {
-	int		nb_philo;
-	int		time_die;
-	int		time_eat;
-	int		time_sleep;
-	int		nb_eat;
-	int		die;
-	mutex_t	mutex;
+	int				nb_philo;
+	int				time_die;
+	int				time_eat;
+	int				time_sleep;
+	int				nb_eat;
+	int				die;
+	pthread_mutex_t	display;
 }				t_args;
 
 typedef	struct s_list
 {
 	int				philo_id;
-	long			start_time;
+	long			t_start_sim;
 	long			t_last_meal;
-	mutex_t			mutex;
+	pthread_mutex_t	fork;
+	pthread_mutex_t	eat;
 	t_args			*args;
 	struct s_list	*next;
 }				t_list;
@@ -58,20 +57,19 @@ long	ft_atoi_l(const char *str);
 int		ft_isdigit(int c);
 
 /*			circular_lst.c		*/
-int		lstadd_front(t_list **lst, t_args *args, int ph_id, mutex_t mutex);
-int		lstadd_back(t_list **lst, t_args *args, int ph_id, mutex_t mutex);
+int		lstadd_back(t_list **lst, t_args *args, pthread_mutex_t *mutex);
 void	lstclear_front(t_list **lst);
 
 /*		   create_lst.c	    	*/
 int		create_lst(t_list **lst, t_args *args);
-int		create_mutexs(pthread_mutex_t	**mutex, int nb);
+int		create_mutexs(pthread_mutex_t **mutex, int nb);
 
 /*	     create_threads.c	  	*/
 int		create_threads(t_list *lst);
 int		join_threads(pthread_t *th, int nb);
 
 void	*start_routine(void *ptr);
-void	print_status(t_list *lst, char *str, long start_time);
+void	print_status(t_list *lst, char *str);
 long	timer_ms(void);
 
 #endif

@@ -1,43 +1,27 @@
 
 #include "../includes/philo.h"
 
-t_list	*get_new_node(t_args *args, int ph_id, pthread_mutex_t mutex)
+t_list	*get_new_node(t_args *args, pthread_mutex_t *mutex)
 {
-	t_list	*node;
+	t_list		*node;
+	static int	i;
 
 	node = (t_list *)malloc(sizeof(t_list));
 	if (node == NULL)
 		return (NULL);
-	node->philo_id = ph_id;
-	node->mutex = mutex;
+	node->fork = mutex[++i];
+	node->eat = mutex[++i];
+	node->philo_id = i / 2;
 	node->args = args;
 	node->next = NULL;
 	return (node);
 }
 
-int	lstadd_front(t_list **lst, t_args *args, int ph_id, pthread_mutex_t mutex)
+int	lstadd_back(t_list **lst, t_args *args, pthread_mutex_t *mutex)
 {
 	t_list	*node;
 
-	node = get_new_node(args, ph_id, mutex);
-	if (node == NULL)
-		return (-1);
-	if (*lst == NULL)
-	{
-		node->next = node;
-		*lst = node;
-		return (0);
-	}
-	node->next = (*lst)->next;
-	(*lst)->next = node;
-	return (0);
-}
-
-int	lstadd_back(t_list **lst, t_args *args, int ph_id, pthread_mutex_t mutex)
-{
-	t_list	*node;
-
-	node = get_new_node(args, ph_id, mutex);
+	node = get_new_node(args, mutex);
 	if (node == NULL)
 		return (-1);
 	if (*lst == NULL)
@@ -62,6 +46,6 @@ void	lstclear_front(t_list **lst)
 	(*lst)->next = temp->next;
 	if (temp == *lst)
 		*lst = NULL;
-	pthread_mutex_destroy(&temp->mutex);
+	pthread_mutex_destroy(&temp->fork);
 	free(temp);
 }
