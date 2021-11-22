@@ -29,12 +29,22 @@ int	create_threads(t_list *lst)
 	{
 		lst = lst->next;
 		pthread_create(&th[i], NULL, start_routine, lst);
-		usleep(100);
+		usleep(50);
 		i++;
 	}
 	/*
 	 * supervisor
 	 */
+	while (1)
+	{
+		lst = lst->next;
+		if (timer_ms() - lst->t_last_meal >= lst->args->time_die)
+		{
+			print_status(lst, "died", lst->start_time);
+			lst->args->die = 1;
+			break ;
+		}
+	}
 	join_threads(th, nb);
 	return (0);
 }

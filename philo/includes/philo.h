@@ -23,7 +23,7 @@
 
 # define INT_MAX 2147483647
 
-typedef pthread_mutex_t mutex_t
+typedef pthread_mutex_t mutex_t;
 
 typedef struct s_args
 {
@@ -32,12 +32,15 @@ typedef struct s_args
 	int		time_eat;
 	int		time_sleep;
 	int		nb_eat;
+	int		die;
 	mutex_t	mutex;
 }				t_args;
 
 typedef	struct s_list
 {
 	int				philo_id;
+	long			start_time;
+	long			t_last_meal;
 	mutex_t			mutex;
 	t_args			*args;
 	struct s_list	*next;
@@ -68,5 +71,7 @@ int		create_threads(t_list *lst);
 int		join_threads(pthread_t *th, int nb);
 
 void	*start_routine(void *ptr);
+void	print_status(t_list *lst, char *str, long start_time);
+long	timer_ms(void);
 
 #endif

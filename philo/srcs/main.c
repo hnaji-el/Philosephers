@@ -12,6 +12,14 @@
 
 #include "../includes/philo.h"
 
+long	timer_ms(void)
+{
+	struct timeval	cur_time;
+
+	gettimeofday(&cur_time, NULL);
+	return ((cur_time.tv_sec * 1000) + cur_time.tv_usec / 1000);
+}
+
 long	timer_us(void)
 {
 	struct timeval	cur_time;
@@ -32,35 +40,39 @@ int	correct_usleep(useconds_t usec)
 
 void	print_status(t_list *lst, char *str, long start_time)
 {
-	pthread_mutex_lock();
-	printf("%ld %d %s\n",
-			(timer_us() - start_time) / 1000,
+	if (lst->args->die == 1)
+	{
+		pthread_mutex_lock(&(lst->args->mutex));
+		printf("%ld %d %s\n",
+			timer_ms() - start_time,
 			lst->philo_id,
 			str
 			);
-	pthread_mutex_unlock();
+		pthread_mutex_unlock(&(lst->args->mutex));
+	}
 }
 
 void	*start_routine(void *ptr)
 {
-	long	start_time;
 	t_list	*lst;
 
-	start_time = timer_us();
 	lst = (t_list *)ptr;
+	lst->start_time = timer_ms();
+	lst->t_last_meal = lst->start_time;
 	while (1)
 	{
 		pthread_mutex_lock(&(lst->mutex));
-		print_status(lst, "has taken a fork", start_time);
+		print_status(lst, "has taken a fork", lst->start_time);
 		pthread_mutex_lock(&(lst->next->mutex));
-		print_status(lst, "has taken a fork", start_time);
-		print_status(lst, "is eating", start_time);
+		print_status(lst, "has taken a fork", lst->start_time);
+		lst->t_last_meal = timer_ms();
+		print_status(lst, "is eating", lst->start_time);
 		correct_usleep(lst->args->time_eat * 1000);
 		pthread_mutex_unlock(&(lst->mutex));
 		pthread_mutex_unlock(&(lst->next->mutex));
-		print_status(lst, "is sleeping", start_time);
+		print_status(lst, "is sleeping", lst->start_time);
 		correct_usleep(lst->args->time_sleep * 1000);
-		print_status(lst, "is thinking", start_time);
+		print_status(lst, "is thinking", lst->start_time);
 	}
 	return (NULL);
 }

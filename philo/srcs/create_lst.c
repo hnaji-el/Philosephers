@@ -25,7 +25,9 @@ int	create_lst(t_list **lst, t_args *args)
 	int				ret;
 
 	i = args->nb_philo;
-	ret = create_mutexs(&mutex, args->nb_philo);
+	ret = create_mutexs(&mutex, args->nb_philo + 1);
+	if (ret == 0)
+		args->mutex = mutex[args->nb_philo];
 	while (ret == 0 && --i >= 0)
 		ret = lstadd_front(lst, args, i + 1, mutex[i]);
 	free(mutex);

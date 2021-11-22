@@ -25,7 +25,7 @@ INCLUDES = ./includes/philo.h
 
 COMPILER = cc
 
-FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
+FLAGS = -Wall -Wextra -Werror #-g -fsanitize=thread
 
 all: $(NAME)
 

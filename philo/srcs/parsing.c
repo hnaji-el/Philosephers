@@ -85,6 +85,7 @@ int	parsing(t_args **args, int argc, char **argv)
 	if (*args == NULL)
 		return (put_error(3));
 	(*args)->nb_eat = -1;
+	(*args)->die = 0;
 	while (argc-- > 1)
 	{
 		if (!argument_isvalid(argv[argc], &number))
