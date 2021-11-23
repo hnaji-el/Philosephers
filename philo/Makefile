@@ -19,13 +19,15 @@ SRCS = ./srcs/main.c \
 	   ./srcs/parsing.c \
 	   ./srcs/circular_lst.c \
 	   ./srcs/start_routine.c \
-	   ./srcs/timer.c \
+	   ./srcs/correct_usleep.c \
+	   ./srcs/controller.c \
+	   ./srcs/timer.c
 
 INCLUDES = ./includes/philo.h
 
 COMPILER = cc
 
-FLAGS = -Wall -Wextra -Werror #-g -fsanitize=thread
+FLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 
 all: $(NAME)
 

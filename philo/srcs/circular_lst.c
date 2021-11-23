@@ -12,6 +12,7 @@ t_list	*get_new_node(t_args *args, pthread_mutex_t *mutex)
 	node->fork = mutex[++i];
 	node->eat = mutex[++i];
 	node->philo_id = i / 2;
+	node->count_eat = 0;
 	node->args = args;
 	node->next = NULL;
 	return (node);
@@ -46,6 +47,5 @@ void	lstclear_front(t_list **lst)
 	(*lst)->next = temp->next;
 	if (temp == *lst)
 		*lst = NULL;
-	pthread_mutex_destroy(&temp->fork);
 	free(temp);
 }

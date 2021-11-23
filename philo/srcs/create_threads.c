@@ -14,42 +14,63 @@ int	join_threads(pthread_t *th, int nb)
 	return (0);
 }
 
-void	controller_of_threads(t_list *lst)
+int	launch_threads_pair(t_list *lst, pthread_t *th, long t_start_sim)
 {
-	while (1)
+	int		i;
+
+	i = 1;
+	lst = lst->next->next;
+	while (i < lst->args->nb_philo)
 	{
-		lst = lst->next;
-		if (timer_ms() - lst->t_last_meal >= lst->args->time_die)
+		lst->t_start_sim = t_start_sim;
+		lst->t_last_meal = t_start_sim;
+		if (pthread_create(&th[i], NULL, start_routine, lst) != 0)
 		{
-			print_status(lst, "died");
-			lst->args->die = 1;
-			break ;
+			free(th);
+			return (-1);
 		}
+		lst = lst->next->next;
+		i += 2;
 	}
+	return (0);
+}
+
+int	launch_threads_unpair(t_list *lst, pthread_t *th, long t_start_sim)
+{
+	int		i;
+
+	i = 0;
+	lst = lst->next;
+	while (i < lst->args->nb_philo)
+	{
+		lst->t_start_sim = t_start_sim;
+		lst->t_last_meal = t_start_sim;
+		if (pthread_create(&th[i], NULL, start_routine, lst) != 0)
+		{
+			free(th);
+			return (-1);
+		}
+		lst = lst->next->next;
+		i += 2;
+	}
+	return (0);
 }
 
 int	create_threads(t_list *lst)
 {
 	pthread_t	*th;
-	int			nb;
-	int			i;
 	long		t_start_sim;
 
-	i = 0;
-	nb = lst->args->nb_philo;
-	th = (pthread_t *)malloc(sizeof(pthread_t) * nb);
+	th = (pthread_t *)malloc(sizeof(pthread_t) * lst->args->nb_philo);
 	if (th == NULL)
 		return (put_error(3));
 	t_start_sim = timer_ms();
-	while (i < nb)
-	{
-		lst = lst->next;
-		lst->t_start_sim = t_start_sim;
-		lst->t_last_meal = t_start_sim;
-		pthread_create(&th[i], NULL, start_routine, lst);
-		i++;
-	}
+	if (launch_threads_unpair(lst, th, t_start_sim) == -1)
+		return (put_error(5));
+	usleep(100);
+	if (launch_threads_pair(lst, th, t_start_sim) == -1)
+		return (put_error(5));
 	controller_of_threads(lst);
-	join_threads(th, nb);
+	free(th);
 	return (0);
 }

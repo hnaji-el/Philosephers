@@ -39,6 +39,7 @@ typedef	struct s_list
 	int				philo_id;
 	long			t_start_sim;
 	long			t_last_meal;
+	int				count_eat;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	eat;
 	t_args			*args;
@@ -68,8 +69,21 @@ int		create_mutexs(pthread_mutex_t **mutex, int nb);
 int		create_threads(t_list *lst);
 int		join_threads(pthread_t *th, int nb);
 
+/*	     correct_usleep.c	  	*/
+int		correct_usleep(useconds_t usec);
+
+/*	     		main.c		  	*/
+int		free_memory(t_list *lst, t_args *args, int ret);
+
+/*			start_routine.c		*/
 void	*start_routine(void *ptr);
 void	print_status(t_list *lst, char *str);
+
+/*				timer.c			*/
 long	timer_ms(void);
+long	timer_us(void);
+
+/*			controller.c		*/
+void	controller_of_threads(t_list *lst);
 
 #endif
