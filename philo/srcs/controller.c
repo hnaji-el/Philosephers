@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   controller.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/23 04:05:24 by hnaji-el          #+#    #+#             */
+/*   Updated: 2021/11/23 04:05:28 by hnaji-el         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/philo.h"
 
@@ -23,11 +34,13 @@ void	controller_of_threads(t_list *lst)
 		if ((timer_ms() - lst->t_last_meal >= lst->args->time_die)
 			|| (lst->args->nb_eat != -1 && check_nb_eat(lst)))
 		{
-		//	pthread_mutex_lock(&(lst->eat));
-			lst->args->die = 1;
-			print_status(lst, "died");
-			break ;
-		//	pthread_mutex_unlock(&(lst->eat));
+			pthread_mutex_lock(&(lst->eat));
+			if (lst->flag == 0)
+			{
+				lst->args->die = 1;
+				print_status(lst, "died");
+				break ;
+			}
 		}
 	}
 }

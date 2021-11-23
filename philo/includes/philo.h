@@ -6,7 +6,7 @@
 /*   By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 09:47:12 by hnaji-el          #+#    #+#             */
-/*   Updated: 2021/11/21 19:14:05 by hnaji-el         ###   ########.fr       */
+/*   Updated: 2021/11/23 04:03:01 by hnaji-el         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ typedef struct s_args
 	pthread_mutex_t	display;
 }				t_args;
 
-typedef	struct s_list
+typedef struct s_list
 {
 	int				philo_id;
 	long			t_start_sim;
@@ -43,6 +43,7 @@ typedef	struct s_list
 	pthread_mutex_t	fork;
 	pthread_mutex_t	eat;
 	t_args			*args;
+	int				flag;
 	struct s_list	*next;
 }				t_list;
 

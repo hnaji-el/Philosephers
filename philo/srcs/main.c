@@ -34,7 +34,6 @@ int	main(int argc, char **argv)
 	args = (void *)0;
 	if (!parsing(&args, argc, argv) && !create_lst(&lst, args))
 		ret = create_threads(lst);
-	system("leaks philo");
 	if (ret == -1)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);

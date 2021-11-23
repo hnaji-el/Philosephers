@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   start_routine.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/23 04:10:12 by hnaji-el          #+#    #+#             */
+/*   Updated: 2021/11/23 04:10:15 by hnaji-el         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "../includes/philo.h"
 
@@ -23,13 +34,15 @@ void	take_forks(t_list *lst)
 
 void	eating(t_list *lst)
 {
-//	pthread_mutex_lock(&(lst->eat));
+	lst->flag = 1;
+	pthread_mutex_lock(&(lst->eat));
 	lst->t_last_meal = timer_ms();
 	print_status(lst, "is eating");
+	pthread_mutex_unlock(&(lst->eat));
 	correct_usleep(lst->args->time_eat * 1000);
 	lst->count_eat += 1;
-//	pthread_mutex_unlock(&(lst->eat));
 	pthread_mutex_unlock(&(lst->fork));
+	lst->flag = 0;
 	pthread_mutex_unlock(&(lst->next->fork));
 }
 
