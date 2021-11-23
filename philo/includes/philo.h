@@ -30,7 +30,6 @@ typedef struct s_args
 	int				time_eat;
 	int				time_sleep;
 	int				nb_eat;
-	int				die;
 	pthread_mutex_t	display;
 }				t_args;
 
@@ -79,6 +78,7 @@ int		free_memory(t_list *lst, t_args *args, int ret);
 /*			start_routine.c		*/
 void	*start_routine(void *ptr);
 void	print_status(t_list *lst, char *str);
+void	print_death_status(t_list *lst, char *str);
 
 /*				timer.c			*/
 long	timer_ms(void);

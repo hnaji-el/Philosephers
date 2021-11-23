@@ -12,6 +12,16 @@
 
 #include "../includes/philo.h"
 
+void	print_death_status(t_list *lst, char *str)
+{
+	pthread_mutex_lock(&(lst->args->display));
+	printf("%ld %d %s\n",
+		timer_ms() - lst->t_start_sim,
+		lst->philo_id,
+		str
+		);
+}
+
 void	print_status(t_list *lst, char *str)
 {
 	pthread_mutex_lock(&(lst->args->display));
@@ -20,8 +30,7 @@ void	print_status(t_list *lst, char *str)
 		lst->philo_id,
 		str
 		);
-	if (!lst->args->die)
-		pthread_mutex_unlock(&(lst->args->display));
+	pthread_mutex_unlock(&(lst->args->display));
 }
 
 void	take_forks(t_list *lst)
@@ -34,15 +43,13 @@ void	take_forks(t_list *lst)
 
 void	eating(t_list *lst)
 {
-	lst->flag = 1;
 	pthread_mutex_lock(&(lst->eat));
 	lst->t_last_meal = timer_ms();
 	print_status(lst, "is eating");
-	pthread_mutex_unlock(&(lst->eat));
 	correct_usleep(lst->args->time_eat * 1000);
 	lst->count_eat += 1;
+	pthread_mutex_unlock(&(lst->eat));
 	pthread_mutex_unlock(&(lst->fork));
-	lst->flag = 0;
 	pthread_mutex_unlock(&(lst->next->fork));
 }
 

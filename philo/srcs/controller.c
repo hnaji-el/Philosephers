@@ -31,16 +31,14 @@ void	controller_of_threads(t_list *lst)
 	while (1)
 	{
 		lst = lst->next;
-		if ((timer_ms() - lst->t_last_meal >= lst->args->time_die)
-			|| (lst->args->nb_eat != -1 && check_nb_eat(lst)))
+		pthread_mutex_lock(&(lst->eat));
+		if ((timer_ms() - lst->t_last_meal >= lst->args->time_die))
 		{
-			pthread_mutex_lock(&(lst->eat));
-			if (lst->flag == 0)
-			{
-				lst->args->die = 1;
-				print_status(lst, "died");
-				break ;
-			}
+			print_death_status(lst, "died");
+			break ;
 		}
+		pthread_mutex_lock(&(lst->eat));
+		if (lst->args->nb_eat != -1 && check_nb_eat(lst))
+			break ;
 	}
 }
