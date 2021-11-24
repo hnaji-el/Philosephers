@@ -6,7 +6,7 @@
 /*   By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/16 09:47:12 by hnaji-el          #+#    #+#             */
-/*   Updated: 2021/11/23 04:03:01 by hnaji-el         ###   ########.fr       */
+/*   Updated: 2021/11/23 23:51:53 by hnaji-el         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ typedef struct s_list
 	int				count_eat;
 	pthread_mutex_t	fork;
 	pthread_mutex_t	eat;
+	int				is_eating;
 	t_args			*args;
-	int				flag;
 	struct s_list	*next;
 }				t_list;
 

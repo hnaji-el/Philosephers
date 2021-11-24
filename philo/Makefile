@@ -6,7 +6,7 @@
 #    By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/11/16 10:01:14 by hnaji-el          #+#    #+#              #
-#    Updated: 2021/11/23 04:13:34 by hnaji-el         ###   ########.fr        #
+#    Updated: 2021/11/24 01:15:39 by hnaji-el         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ INCLUDES = ./includes/philo.h
 
 COMPILER = cc
 
-FLAGS = -Wall -Wextra -Werror -pthread
+FLAGS = -Wall -Wextra -Werror -pthread -g -fsanitize=address
 
 all: $(NAME)
 

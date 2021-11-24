@@ -6,7 +6,7 @@
 /*   By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/23 04:03:30 by hnaji-el          #+#    #+#             */
-/*   Updated: 2021/11/23 04:04:12 by hnaji-el         ###   ########.fr       */
+/*   Updated: 2021/11/24 00:15:52 by hnaji-el         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ t_list	*get_new_node(t_args *args, pthread_mutex_t *mutex)
 	node->philo_id = i / 2;
 	node->count_eat = 0;
 	node->args = args;
-	node->flag = 0;
+	node->is_eating = 0;
 	node->next = NULL;
 	return (node);
 }

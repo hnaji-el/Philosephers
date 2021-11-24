@@ -6,7 +6,7 @@
 /*   By: hnaji-el <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 09:16:41 by hnaji-el          #+#    #+#             */
-/*   Updated: 2021/11/23 04:09:44 by hnaji-el         ###   ########.fr       */
+/*   Updated: 2021/11/24 01:20:40 by hnaji-el         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ int	put_error(int errnum)
 		write(2, "Error\nThe pthread_join() function failed\n", 41);
 	if (errnum == 5)
 		write(2, "Error\nThe pthread_create() function failed\n", 43);
+	if (errnum == 6)
+		write(2, "Error\nEnter one or more philosophers\n", 37);
 	return (-1);
 }
 
@@ -85,5 +87,7 @@ int	parsing(t_args **args, int argc, char **argv)
 			return (put_error(2));
 		initialize_args(*args, number, argc + 1);
 	}
+	if ((*args)->nb_philo == 0)
+		return (put_error(6));
 	return (0);
 }
